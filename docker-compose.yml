@@ -89,7 +89,7 @@ services:
       - 32413:32413/udp
       - 32414:32414/udp
     environment:
-      - TZ=EST
+      - TZ=${TZ} # timezone, defined in .env
       - PLEX_CLAIM=claim-f3WNRnMLTSoEM43FE6ms
       - ADVERTISE_IP=http://<hostIPAddress>:32400/
     hostname: DESKTOP-M7OT705
@@ -97,3 +97,16 @@ services:
       - ${ROOT}\config\plex\db:/config
       - ${ROOT}\config\plex\transcode:/transcode
       - ${ROOT}\complete:/data
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    environment:
+      - PUID=${PUID} # default user id, defined in .env
+      - PGID=${PGID} # default group id, defined in .env
+      - TZ=${TZ} # timezone, defined in .env
+      - BASE_URL=/ombi #optional
+    volumes:
+      - ${ROOT}\config\ombi:/config
+    ports:
+      - 3579:3579
+    restart: unless-stopped
