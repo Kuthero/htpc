@@ -1,7 +1,6 @@
 version: '3.4'
 services:
   vpn:
-    container_name: vpn
     image: dperson/openvpn-client:latest
     cap_add:
       - net_admin # required to modify network interfaces
@@ -17,7 +16,6 @@ services:
     command: '-f "" -r 192.168.1.0/24' # enable firewall and route local network traffic
 
   deluge:
-    container_name: deluge
     image: linuxserver/deluge:latest
     restart: unless-stopped
     network_mode: service:vpn # run on the vpn network
@@ -30,7 +28,6 @@ services:
       - ${ROOT}/config/deluge:/config # config files
   
   jackett:
-    container_name: jackett
     image: linuxserver/jackett:latest
     restart: unless-stopped
     environment:
@@ -44,7 +41,6 @@ services:
       - 9117:9117
 
   sonarr:
-    container_name: sonarr
     image: linuxserver/sonarr:preview
     restart: unless-stopped
     environment:
@@ -59,7 +55,6 @@ services:
       - 8989:8989
 
   radarr:
-    container_name: radarr
     image: linuxserver/radarr:preview
     restart: unless-stopped
     environment:
@@ -75,7 +70,6 @@ services:
       - 7878:7878
 
   plex:
-    container_name: plex
     image: plexinc/pms-docker
     restart: unless-stopped
     ports:
@@ -94,19 +88,18 @@ services:
       - ADVERTISE_IP=http://<hostIPAddress>:32400/
     hostname: DESKTOP-M7OT705
     volumes:
-      - ${ROOT}\config\plex\db:/config
-      - ${ROOT}\config\plex\transcode:/transcode
-      - ${ROOT}\complete:/data
+      - ${ROOT}/config/plex/db:/config
+      - ${ROOT}/config/plex/transcode:/transcode
+      - ${ROOT}/complete:/data
   ombi:
     image: linuxserver/ombi
-    container_name: ombi
     environment:
       - PUID=${PUID} # default user id, defined in .env
       - PGID=${PGID} # default group id, defined in .env
       - TZ=${TZ} # timezone, defined in .env
       - BASE_URL=/ombi #optional
     volumes:
-      - ${ROOT}\config\ombi:/config
+      - ${ROOT}/config/ombi:/config
     ports:
       - 3579:3579
     restart: unless-stopped
